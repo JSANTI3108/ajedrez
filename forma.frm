@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form Form2 
-   Caption         =   "Form2"
+   Caption         =   "Juego de Ajedrez"
    ClientHeight    =   9045
    ClientLeft      =   120
    ClientTop       =   465
@@ -802,20 +802,21 @@ Private Enum Piezas
     Rey_Negro_Negro
 
 End Enum
-'
-'Private Sub inicioJuego()
-' Call llenarTablero
-'
-'End Sub
+
+Private Sub inicioJuego()
+
+Call llenarTablero
+Call Tablero_Inicial
+
+'Debe ser TRUE solo si es tu TURNO!!!
+puedeJugar = True
+
+End Sub
 
 Private Sub Form_Load()
 
-Call llenarTablero
-
-Call Tablero_Inicial
-
-'Debe ser TRUE si te TOCA!!!
-puedeJugar = True
+Call Tablero_Previo
+puedeJugar = False
 
 'Dim x As Integer
 ''Dim resto As Integer
@@ -847,6 +848,11 @@ puedeJugar = True
 
 End Sub
 
+'Inicio del Juego
+Public Sub Command1_Click()
+	Call inicioJuego
+End Sub
+
 
 
 
@@ -863,8 +869,6 @@ Dim subIndice As Integer
 
 subIndice = 0
 
-
-
 For z = 1 To 8
     For x = 1 To 8
         imagen(subIndice + x).DragMode = 1
@@ -873,9 +877,6 @@ For z = 1 To 8
     subIndice = subIndice + 8
 Next
 
-
-
-       
 '        imagen(62).Picture = listaImagenes.ListImages(Piezas.Alfil_Negro_Blanco).Picture
 '        imagen(59).Picture = listaImagenes.ListImages(Piezas.Alfil_Negro_Negro).Picture
 '        imagen(63).Picture = listaImagenes.ListImages(Piezas.Caballo_Negro_Blanco).Picture
@@ -893,6 +894,21 @@ Next
 '
 '        imagen(3).Picture = listaImagenes.ListImages(Piezas.Alfil_Blanco_Blanco).Picture
 '        imagen(6).Picture = listaImagenes.ListImages(Piezas.Alfil_Blanco_Negro).Picture
+
+End Sub
+
+Private Sub Tablero_Previo()
+
+Dim x As Integer
+Dim subIndice As Integer
+subIndice = 0
+For z = 1 To 8
+    For x = 1 To 8
+        imagen(subIndice + x).DragMode = 0
+        imagen(subIndice + x).Picture = listaImagenes.ListImages(IIf(EsCeldaBlanca(subIndice + x), Piezas.Blanco, Piezas.NEGRO)).Picture
+    Next
+    subIndice = subIndice + 8
+Next
 
 End Sub
 
@@ -1154,10 +1170,6 @@ Private Function validaPeon(x As Integer, y As Integer, x1 As Integer, y1 As Int
 '        ' FIN MOVIMIENTO BLANCO
     End If
 End Function
-
-Private Sub i_Click()
-
-End Sub
 
 ' Ocurre al tomar la pieza
 Private Sub imagen_DragOver(Index As Integer, Source As Control, x As Single, y As Single, State As Integer)
