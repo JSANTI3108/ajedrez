@@ -853,13 +853,6 @@ Public Sub Command1_Click()
 	Call inicioJuego
 End Sub
 
-
-
-
-
-
-
-
 'Orden Piezas negras en Tablero
 Private Sub Tablero_Inicial()
 
