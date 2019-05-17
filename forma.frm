@@ -5,11 +5,27 @@ Begin VB.Form Form2
    ClientHeight    =   9045
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   15375
+   ClientWidth     =   13290
    LinkTopic       =   "Form2"
    ScaleHeight     =   9045
-   ScaleWidth      =   15375
+   ScaleWidth      =   13290
    StartUpPosition =   3  'Windows Default
+   Begin VB.Frame Frame2 
+      Height          =   7695
+      Left            =   8280
+      TabIndex        =   2
+      Top             =   240
+      Width           =   4935
+      Begin VB.CommandButton Command1 
+         BackColor       =   &H80000000&
+         Caption         =   "INICIAR JUEGO"
+         Height          =   1095
+         Left            =   600
+         TabIndex        =   3
+         Top             =   360
+         Width           =   3855
+      End
+   End
    Begin VB.PictureBox Picture1 
       BackColor       =   &H8000000C&
       FillColor       =   &H00000080&
@@ -17,19 +33,10 @@ Begin VB.Form Form2
       Height          =   8895
       Left            =   7920
       ScaleHeight     =   8835
-      ScaleWidth      =   4995
+      ScaleWidth      =   75
       TabIndex        =   1
       Top             =   120
-      Width           =   5055
-      Begin VB.CommandButton Command1 
-         BackColor       =   &H80000000&
-         Caption         =   "INICIAR JUEGO"
-         Height          =   1095
-         Left            =   600
-         TabIndex        =   2
-         Top             =   3120
-         Width           =   3855
-      End
+      Width           =   135
    End
    Begin MSComctlLib.ImageList listaImagenes 
       Left            =   14040
@@ -850,22 +857,22 @@ End Sub
 
 'Inicio del Juego
 Public Sub Command1_Click()
-	Call inicioJuego
+    Call inicioJuego
 End Sub
 
 'Orden Piezas negras en Tablero
 Private Sub Tablero_Inicial()
 
 Dim z As Integer
-Dim x As Integer
+Dim X As Integer
 Dim subIndice As Integer
 
 subIndice = 0
 
 For z = 1 To 8
-    For x = 1 To 8
-        imagen(subIndice + x).DragMode = 1
-        imagen(subIndice + x).Picture = listaImagenes.ListImages(funcionPieza(tablero(z, x), subIndice + x)).Picture
+    For X = 1 To 8
+        imagen(subIndice + X).DragMode = 1
+        imagen(subIndice + X).Picture = listaImagenes.ListImages(funcionPieza(tablero(z, X), subIndice + X)).Picture
     Next
     subIndice = subIndice + 8
 Next
@@ -892,13 +899,14 @@ End Sub
 
 Private Sub Tablero_Previo()
 
-Dim x As Integer
+Dim X As Integer
+Dim z As Integer
 Dim subIndice As Integer
 subIndice = 0
 For z = 1 To 8
-    For x = 1 To 8
-        imagen(subIndice + x).DragMode = 0
-        imagen(subIndice + x).Picture = listaImagenes.ListImages(IIf(EsCeldaBlanca(subIndice + x), Piezas.Blanco, Piezas.NEGRO)).Picture
+    For X = 1 To 8
+        imagen(subIndice + X).DragMode = 0
+        imagen(subIndice + X).Picture = listaImagenes.ListImages(IIf(EsCeldaBlanca(subIndice + X), Piezas.Blanco, Piezas.NEGRO)).Picture
     Next
     subIndice = subIndice + 8
 Next
@@ -978,24 +986,24 @@ Private Function EsCeldaBlanca(celda As Integer) As Boolean
 End Function
 
 ' FUNCION VALIDA TORRE
- Private Function validaTorre(x As Integer, y As Integer, x1 As Integer, y1 As Integer) As Boolean
+ Private Function validaTorre(X As Integer, Y As Integer, x1 As Integer, y1 As Integer) As Boolean
     Dim fichas As Integer
     Dim z As Integer
     
     fichas = 0
     validaTorre = False
     
-    If tablero(x, y) < 0 Then
+    If tablero(X, Y) < 0 Then
     
-        If (x = x1) Or (y = y1) Then
+        If (X = x1) Or (Y = y1) Then
             
-            If x = x1 Then
+            If X = x1 Then
             ' se mueve en las filas
 
-                If (y < y1) Then
+                If (Y < y1) Then
                 
-                    For z = (y + 1) To (y1 - 1)
-                        If (tablero(x, z) <> 0) Then
+                    For z = (Y + 1) To (y1 - 1)
+                        If (tablero(X, z) <> 0) Then
                             fichas = fichas + 1
                         End If
                     Next
@@ -1003,8 +1011,8 @@ End Function
                     
                 Else
                 
-                    For z = (y1 + 1) To (y - 1)
-                        If (tablero(x, z) <> 0) Then
+                    For z = (y1 + 1) To (Y - 1)
+                        If (tablero(X, z) <> 0) Then
                             fichas = fichas + 1
                         End If
                     Next
@@ -1013,10 +1021,10 @@ End Function
                 
             Else
             
-                If (x < x1) Then
+                If (X < x1) Then
                 
-                    For z = (x + 1) To (x1 - 1)
-                        If (tablero(z, y) <> 0) Then
+                    For z = (X + 1) To (x1 - 1)
+                        If (tablero(z, Y) <> 0) Then
                             fichas = fichas + 1
                         End If
                     Next
@@ -1024,8 +1032,8 @@ End Function
                     
                 Else
                    
-                    For z = (x1 + 1) To (x - 1)
-                        If (tablero(z, y) <> 0) Then
+                    For z = (x1 + 1) To (X - 1)
+                        If (tablero(z, Y) <> 0) Then
                             fichas = fichas + 1
                         End If
                     Next
@@ -1052,7 +1060,7 @@ End Function
 End Function
 
 'FUNCION VALIDA CABALLO
- Private Function validaCaballo(x As Integer, y As Integer, x1 As Integer, y1 As Integer) As Boolean
+ Private Function validaCaballo(X As Integer, Y As Integer, x1 As Integer, y1 As Integer) As Boolean
     Dim fichas As Integer
     Dim z As Integer
     
@@ -1061,21 +1069,21 @@ End Function
     
 '          If tablero(x, y) Then
 
-        If ((x1 = x - 1) And (y1 = y - 2)) Or ((y1 = y + 1) And (x1 = x + 2)) Then
+        If ((x1 = X - 1) And (y1 = Y - 2)) Or ((y1 = Y + 1) And (x1 = X + 2)) Then
             validaCaballo = True
-          ElseIf ((x1 = x + 1) And (y1 = y - 2)) Then
+          ElseIf ((x1 = X + 1) And (y1 = Y - 2)) Then
             validaCaballo = True
-          ElseIf ((x1 = x - 2) And (y1 = y - 1)) Then
+          ElseIf ((x1 = X - 2) And (y1 = Y - 1)) Then
             validaCaballo = True
-          ElseIf ((x1 = x + 2) And (y1 = y - 1)) Then
+          ElseIf ((x1 = X + 2) And (y1 = Y - 1)) Then
              validaCaballo = True
-          ElseIf ((x1 = x - 1) And (y1 = y + 2)) Then
+          ElseIf ((x1 = X - 1) And (y1 = Y + 2)) Then
             validaCaballo = True
-          ElseIf ((x1 = x - 1) And (y1 = y + 2)) Then
+          ElseIf ((x1 = X - 1) And (y1 = Y + 2)) Then
             validaCaballo = True
-          ElseIf ((x1 = x - 2) And (y1 = y + 1)) Then
+          ElseIf ((x1 = X - 2) And (y1 = Y + 1)) Then
             validaCaballo = True
-          ElseIf ((x1 = x + 2) And (y1 = y + 1)) Then
+          ElseIf ((x1 = X + 2) And (y1 = Y + 1)) Then
              validaCaballo = True
 '          ElseIf ((x1 = x - 1) And (y1 = y - 2)) Then
 '             validaCaballo = True
@@ -1102,42 +1110,56 @@ End Function
 End Function
 
 'FUNCION VALIDA ALFIL
-
- Private Function validaAlfil(x As Integer, y As Integer, x1 As Integer, y1 As Integer) As Boolean
+Private Function validaAlfil(X As Integer, Y As Integer, x1 As Integer, y1 As Integer) As Boolean
     Dim fichas As Integer
     Dim z As Integer
+    
+    Dim distanciaX As Integer
+    Dim distanciaY As Integer
+    
+    
+    Dim Xd As Integer
+    Dim Yd As Integer
     
     fichas = 0
     validaAlfil = False
     
-          If tablero(x, y) Then
+    distanciaX = Abs(X - x1)
+    distanciaY = Abs(Y - y1)
+    
+    
+    If (distanciaX = distanciaY) Then
+    
+        Xd = IIf(X > x1, x1, X)
+        Yd = IIf(Y > y1, y1, Y)
+        
+        validaAlfil = True
 
-        If ((x1 = y - 1)) Or (y1 = y + 1) Then
-            validaAlfil = True
-'                                      If ((x1 = x + 1 And y1 = y - 1)) Or (y1 = y + 1) Then
-'                                          validaAlfil = True
-          ElseIf ((x1 = y + 1)) Or (y1 = y - 1) Then
-            validaAlfil = True
+        For z = 1 To (distanciaX - 1)
+            tablero(Xd + z, Yd + z)
             
-
-        End If
-   
-End If
-
+            If (tablero(Xd + z, Yd + z) <> 0) Then
+                validaAlfil = False
+                Exit For
+            End If
+            
+        Next
+    End If
+    
 End Function
 'FUNCION VALIDA MOVIMIENTO PEON
-Private Function validaPeon(x As Integer, y As Integer, x1 As Integer, y1 As Integer) As Boolean
+Private Function validaPeon(X As Integer, Y As Integer, x1 As Integer, y1 As Integer) As Boolean
 
-    If tablero(x, y) < 0 Then
+    If tablero(X, Y) < 0 Then
         ' MOVIMIENTO NEGRO
-        If (y = y1) And ((x = (x1 + 1)) Or (7 = (x1 + 2))) Then
+        If (Y = y1) And ((X = (x1 + 1)) Or (7 = (x1 + 2))) Then
             'ESTA VACIA LA POSICION ?
             If Abs(tablero(x1, y1)) = Pieza.Vacio Then
                 validaPeon = True
             End If
             
         ' CAPTURAR CON NEGRO
-        ElseIf (y1 = (y - 1) Or y1 = (y + 1)) And (x = (x1 + 1)) Then
+        ElseIf (y1 = (Y - 1) Or y1 = (Y + 1)) And (X = (x1 + 1)) Then
             If tablero(x1, y1) > 0 Then
                 validaPeon = True
             End If
@@ -1147,14 +1169,14 @@ Private Function validaPeon(x As Integer, y As Integer, x1 As Integer, y1 As Int
     Else
 '        ' MOVIMIENTO CON BLANCO
 
-          If (y = y1) And ((x = (x1 - 1)) Or (2 = (x1 - 2))) Then
+          If (Y = y1) And ((X = (x1 - 1)) Or (2 = (x1 - 2))) Then
             ' esta vacia la posicion ?
             If Abs(tablero(x1, y1)) = Pieza.Vacio Then
                 validaPeon = True
             End If
             
         ' CAPTURAR BLANCO
-        ElseIf (y1 = (y + 1) Or y1 = (y + 1)) And (x = (x1 + 1)) Then
+        ElseIf (y1 = (Y + 1) Or y1 = (Y + 1)) And (X = (x1 + 1)) Then
             If tablero(x1, y1) > 0 Then
                 validaPeon = True
             End If
@@ -1165,7 +1187,7 @@ Private Function validaPeon(x As Integer, y As Integer, x1 As Integer, y1 As Int
 End Function
 
 ' Ocurre al tomar la pieza
-Private Sub imagen_DragOver(Index As Integer, Source As Control, x As Single, y As Single, State As Integer)
+Private Sub imagen_DragOver(Index As Integer, Source As Control, X As Single, Y As Single, State As Integer)
     If puedeJugar Then
         If (celdaSeleccionada = 0) Then
             celdaSeleccionada = Index
@@ -1175,7 +1197,7 @@ End Sub
 
 
 ' Ocurre al soltar la pieza
-Private Sub imagen_DragDrop(posicionNueva As Integer, Source As Control, x As Single, y As Single)
+Private Sub imagen_DragDrop(posicionNueva As Integer, Source As Control, X As Single, Y As Single)
 
 'Call inicioJuego
 
@@ -1263,7 +1285,25 @@ End Sub
 
 Private Sub llenarTablero()
 
-Dim x  As Integer
+Dim X  As Integer
+Dim z  As Integer
+
+tablero(1, 6) = Pieza.Alfil
+
+
+For X = 1 To 8
+    tablero(2, X) = Pieza.Peon
+Next
+
+tablero(8, 3) = Pieza.Alfil * -1
+
+
+End Sub
+
+
+Private Sub llenarTableroReal()
+
+Dim X  As Integer
 Dim z  As Integer
 
 tablero(1, 1) = Pieza.Torre
@@ -1276,18 +1316,18 @@ tablero(1, 7) = Pieza.Caballo
 tablero(1, 8) = Pieza.Torre
 
 
-For x = 1 To 8
-    tablero(2, x) = Pieza.Peon
+For X = 1 To 8
+    tablero(2, X) = Pieza.Peon
 Next
 
 For z = 3 To 6
-    For x = 1 To 8
-        tablero(z, x) = Pieza.Vacio
+    For X = 1 To 8
+        tablero(z, X) = Pieza.Vacio
     Next
 Next
 
-For x = 1 To 8
-    tablero(7, x) = Pieza.Peon * -1
+For X = 1 To 8
+    tablero(7, X) = Pieza.Peon * -1
 Next
 
 tablero(8, 1) = Pieza.Torre * -1
@@ -1304,17 +1344,17 @@ tablero(8, 8) = Pieza.Torre * -1
 End Sub
 
 
-Private Sub moverPieza(x As Integer, y As Integer, x1 As Integer, y1 As Integer)
+Private Sub moverPieza(X As Integer, Y As Integer, x1 As Integer, y1 As Integer)
     ' posicionar la pieza en la posicion final
-    tablero(x1, y1) = tablero(x, y)
+    tablero(x1, y1) = tablero(X, Y)
     ' eliminar la pieza en la posicion inicial
-    tablero(x, y) = Pieza.Vacio
+    tablero(X, Y) = Pieza.Vacio
 End Sub
 
-Private Function TerminarJugada(x As Integer, y As Integer, x1 As Integer, y1 As Integer) As Boolean
+Private Function TerminarJugada(X As Integer, Y As Integer, x1 As Integer, y1 As Integer) As Boolean
     If tablero(x1, y1) = Pieza.Vacio Then
         TerminarJugada = True
-    ElseIf (tablero(x1, y1) > 0 And tablero(x, y) < 0) Or (tablero(x1, y1) < 0 And tablero(x, y) > 0) Then
+    ElseIf (tablero(x1, y1) > 0 And tablero(X, Y) < 0) Or (tablero(x1, y1) < 0 And tablero(X, Y) > 0) Then
         TerminarJugada = True
     Else
         TerminarJugada = False
